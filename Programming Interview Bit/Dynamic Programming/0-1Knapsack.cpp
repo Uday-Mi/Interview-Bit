@@ -64,6 +64,8 @@ Explanation 2:
  Knapsack capacity is 10 but each item has weight greater than 10 so no items can be considered in the knapsack therefore answer is 0.
  **/
 
+// METHOD 1 -- DYNAMIC PROGRAMMING
+
 int Solution::solve(vector<int> &A, vector<int> &B, int C) {
     
     vector <int> val = A;
@@ -97,4 +99,30 @@ int Solution::solve(vector<int> &A, vector<int> &B, int C) {
     
     return t[n][w];
     
+}
+
+// METHOD - 2 -- RECURSION WITH MEMOIZATION
+
+int t[1001][1001];
+
+int Knapsack(vector <int> &val, vector <int> &wt, int w, int n)
+{
+    if (n == 0 || w == 0)
+    return 0;
+    
+    if (t[n][w] != -1)
+    return t[n][w];
+    
+    if (wt[n - 1] <= w)
+    return t[n][w] = max(val[n - 1] + Knapsack(val, wt, w - wt[n - 1], n - 1), Knapsack(val, wt, w, n - 1));
+    
+    else
+    return t[n][w] = Knapsack(val, wt, w, n - 1);
+}
+
+int Solution::solve(vector<int> &A, vector<int> &B, int C) 
+{
+    memset(t, -1, sizeof(t));
+    
+    return Knapsack(A, B, C, A.size());
 }
